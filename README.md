@@ -22,8 +22,11 @@ Transform your Spotify playlists into beautiful, AI-generated album covers with 
 ![Home Page](screenshots/homepage.png)
 *Description: The main interface of PlaylistPainter.*
 
-![Generated Image](screenshots/generated-image1.png)
 <img src="screenshots/generated-image1.png" alt="Generated Image" width="300"/>
+<img src="screenshots/generated-image2.png" alt="Generated Image" width="300"/>
+<img src="screenshots/generated-image4.png" alt="Generated Image" width="300"/>
+<img src="screenshots/generated-image5.png" alt="Generated Image" width="300"/>
+
 *Description: Example of a generated image from a Spotify playlist.*
 
 ## Technologies Used
