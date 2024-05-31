@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlaylistPainter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: var(--dark-purple);
+            color: white;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn-custom {
+            background-color: var(--murrey);
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: var(--dark-cyan);
+            color: white;
+        }
+        .loading-spinner {
+            display: none;
+        }
+        .spinner-border {
+            width: 10rem;
+            height: 10rem;
+        }
+        .song-list {
+            background-color: var(--tea-rose-red);
+            margin-top: 20px;
+            display: none;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            color: var(--dark-purple);
+        }
+        .list-group-item {
+            background-color: var(--tea-rose-red);
+            border: none;
+        }
+        .form-inline {
+            display: flex;
+            justify-content: center;
+        }
+        .form-inline .form-control {
+            flex: 1;
+        }
+        .form-inline .btn {
+            margin-left: 10px;
+        }
+        .songs-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        /* CSS Variables */
+        :root {
+            --dark-purple: #231123ff;
+            --murrey: #82204aff;
+            --dark-cyan: #558c8cff;
+            --tea-rose-red: #d5b0acff;
+            --puce: #cea0aeff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>PlaylistPainter</h1>
+        <form id="playlist-form" class="mt-4 form-inline">
+            <input type="text" id="playlist-url" name="playlist-url" class="form-control" placeholder="Enter Spotify Playlist URL" required>
+            <button type="submit" class="btn btn-custom">Generate Image</button>
+        </form>
+        <div class="loading-spinner mt-4">
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div id="image-container" class="mt-4">
+            <img id="generated-image" class="img-fluid" alt="Generated Image" style="display: none;">
+            <a id="download-button" href="#" class="btn btn-custom mt-3" download="generated-image.png" style="display: none;">Download Image</a>
+        </div>
+        <div id="songs-container" class="song-list mt-4">
+            <h5>Songs in Playlist:</h5>
+            <ul id="songs-list" class="list-group songs-columns"></ul>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('playlist-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const playlistUrl = document.getElementById('playlist-url').value;
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const imageContainer = document.getElementById('image-container');
+            const generatedImage = document.getElementById('generated-image');
+            const downloadButton = document.getElementById('download-button');
+            const songsContainer = document.getElementById('songs-container');
+            const songsList = document.getElementById('songs-list');
+
+            loadingSpinner.style.display = 'block';
+            generatedImage.style.display = 'none';
+            downloadButton.style.display = 'none';
+            songsContainer.style.display = 'none';
+
+            fetch('http://127.0.0.1:5000/generate_image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ playlist_url: playlistUrl })
+            })
+            .then(response => {
+                loadingSpinner.style.display = 'none';
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                generatedImage.src = `data:image/png;base64,${data.image}`;
+                generatedImage.style.display = 'block';
+                downloadButton.href = generatedImage.src;
+                downloadButton.style.display = 'block';
+
+                // Fetch songs and update the song list
+                fetch('http://127.0.0.1:5000/get_songs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ playlist_url: playlistUrl })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    songsList.innerHTML = '';
+                    data.songs.forEach(song => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = song;
+                        songsList.appendChild(li);
+                    });
+                    songsContainer.style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching songs:', error));
+            })
+            .catch(error => {
+                loadingSpinner.style.display = 'none';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
