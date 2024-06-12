@@ -1,86 +1,18 @@
-apiclient==1.0.4
-async-timeout==4.0.2
-attrs==23.1.0
-Babel @ file:///pub/devel/python/python-babel/python-babel-2.12.1-1.noarch/build/dist/Babel-2.12.1-py3-none-any.whl
-blinker==1.8.2
-cachetools==5.3.2
-certifi==2023.7.22
-chardet @ file:///pub/devel/python/python-chardet/python-chardet-4.0.0-2.noarch/build/dist/chardet-4.0.0-py2.py3-none-any.whl
-charset-normalizer==3.2.0
-click==8.1.7
-docutils @ file:///pub/devel/python/python-docutils/python-docutils-0.18.1-1.noarch/build/dist/docutils-0.18.1-py2.py3-none-any.whl
-exceptiongroup==1.1.3
-filelock==3.14.0
 Flask==3.0.3
 Flask-Cors==4.0.1
-fsspec==2024.5.0
-google-api-core==2.15.0
+gunicorn==22.0.0
+Pillow==8.2.0
+requests==2.31.0
+transformers==4.5.1
+torch==1.8.1
+
+# Dependencies for Hugging Face and other required libraries
+huggingface-hub==0.23.2
+Jinja2==3.1.4
+Werkzeug==3.0.3
+
+# Optional: You might need these based on your additional functionality
 google-api-python-client==2.110.0
 google-auth==2.25.2
-google-auth-httplib2==0.1.1
 google-auth-oauthlib==1.2.0
-googleapis-common-protos==1.62.0
-gunicorn==22.0.0
-h11==0.14.0
-httplib2==0.22.0
-huggingface-hub==0.23.2
-idna==3.4
-imagesize @ file:///pub/devel/python/python-imagesize/python-imagesize-1.3.0-1.noarch/build/dist/imagesize-1.3.0-py2.py3-none-any.whl
-importlib-metadata==7.0.0
-iniconfig @ file:///pub/devel/python/python-iniconfig/python-iniconfig-2.0.0-1.noarch/build/dist/iniconfig-2.0.0-py3-none-any.whl
-itsdangerous==2.2.0
-jaraco.classes==3.3.0
-Jinja2==3.1.4
-keyring==24.3.0
-keyrings.alt==5.0.0
-MarkupSafe==2.1.5
-more-itertools==10.1.0
-oauth2client==4.1.3
-oauthlib==3.2.2
-olefile @ file:///pub/devel/python/python-olefile/python-olefile-0.46-3.noarch/build/dist/olefile-0.46-py2.py3-none-any.whl
-outcome==1.2.0
-packaging==24.0
-Pillow @ file:///home/Hamis/python-imaging/python-imaging-8.4.0-1.x86_64/build/dist/Pillow-8.4.0-cp39-cp39-cygwin_3_3_3_x86_64.whl
-platformdirs @ file:///pub/devel/python/python-platformdirs/python-platformdirs-4.2.0-1.noarch/build/dist/platformdirs-4.2.0-py3-none-any.whl#sha256=16b309552d060f387afa9d2a27d03f7d817691e43d8f1042d4ecde1f192a1f30
-pluggy @ file:///pub/devel/python/python-pluggy/python-pluggy-1.0.0-1.noarch/build/dist/pluggy-1.0.0-py2.py3-none-any.whl
-protobuf==4.25.1
-pyasn1==0.5.1
-pyasn1-modules==0.3.0
-PyDrive==1.3.1
-Pygments @ file:///pub/devel/python/python-pygments/python-pygments-2.10.0-1.noarch/build/dist/Pygments-2.10.0-py3-none-any.whl
-pyicloud==1.0.0
-pyparsing==3.1.1
-PyPDF2==3.0.1
-PySocks==1.7.1
-pytest @ file:///pub/devel/python/python-pytest/python-pytest-7.3.0-1.noarch/build/dist/pytest-7.3.0-py3-none-any.whl
-python-dotenv==1.0.1
-pyttsx3==2.90
-PyYAML==6.0.1
-railroad-diagrams @ file:///pub/devel/python/python-railroad-diagrams/python-railroad-diagrams-3.0.1-1.noarch/build/dist/railroad_diagrams-3.0.1-py3-none-any.whl
-redis==4.6.0
-requests==2.31.0
-requests-file==2.1.0
 requests-oauthlib==1.3.1
-rsa==4.9
-secure-smtplib==0.1.1
-selenium==4.14.0
-six==1.16.0
-sniffio==1.3.0
-snowballstemmer @ file:///pub/devel/python/python-snowballstemmer/python-snowballstemmer-2.2.0-1.noarch/build/dist/snowballstemmer-2.2.0-py2.py3-none-any.whl
-sortedcontainers==2.4.0
-Sphinx @ file:///pub/devel/python/python-sphinx/python-sphinx-4.4.0-1.noarch/build/dist/Sphinx-4.4.0-py3-none-any.whl
-sphinxcontrib-serializinghtml @ file:///pub/devel/python/python-sphinxcontrib-serializinghtml/python-sphinxcontrib-serializinghtml-1.1.5-1.noarch/build/dist/sphinxcontrib_serializinghtml-1.1.5-py2.py3-none-any.whl
-spotipy==2.23.0
-tabulate==0.9.0
-tldextract==5.1.2
-toml @ file:///pub/devel/python/python-toml/python-toml-0.10.2-2.noarch/build/dist/toml-0.10.2-py2.py3-none-any.whl
-tqdm==4.66.4
-trio==0.22.2
-trio-websocket==0.11.1
-typing_extensions==4.5.0
-tzlocal==5.2
-uritemplate==4.1.1
-urllib3==2.0.4
-Werkzeug==3.0.3
-wsproto==1.2.0
-zipp==3.17.0
