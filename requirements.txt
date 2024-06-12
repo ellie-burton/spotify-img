@@ -5,13 +5,9 @@ Pillow==8.2.0
 requests==2.31.0
 transformers==4.5.1
 torch==2.2.0
-
-# Dependencies for Hugging Face and other required libraries
 huggingface-hub==0.23.2
 Jinja2==3.1.4
 Werkzeug==3.0.3
-
-# Optional: You might need these based on your additional functionality
 google-api-python-client==2.110.0
 google-auth==2.25.2
 google-auth-oauthlib==1.2.0
