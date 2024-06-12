@@ -4,7 +4,7 @@ gunicorn==22.0.0
 Pillow==8.2.0
 requests==2.31.0
 transformers==4.5.1
-torch==1.8.1
+torch==2.2.0
 
 # Dependencies for Hugging Face and other required libraries
 huggingface-hub==0.23.2
