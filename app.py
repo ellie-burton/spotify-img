@@ -1,20 +1,30 @@
 from flask import Flask, request, jsonify, render_template
 from music import get_songs_from_playlist
-from huggingface_hub import InferenceClient
 from flask_cors import CORS
-from PIL import Image
 import os
 import io
 import base64
 from dotenv import load_dotenv
 import time
 from requests.exceptions import HTTPError
+from openai import OpenAI
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS
-hf = InferenceClient(token=os.getenv("HUGGINGFACE_API_KEY"))
+
+# Load OpenAI API key from environment variables
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key)
+
+def generate_relevant_objects(song_titles):
+    # Placeholder: Replace with actual logic to generate relevant objects
+    return ["object1", "object2", "object3", "object4", "object5"]
+
+def generate_emotional_descriptors(song_titles):
+    # Placeholder: Replace with actual logic to generate emotional descriptors
+    return ["happy", "sad", "exciting", "calm", "nostalgic"]
 
 @app.route('/')
 def home():
@@ -47,47 +57,31 @@ def generate_image():
         songs = get_songs_from_playlist(playlist_url)
         song_titles = ", ".join(songs)
 
-        retries = 3
-        for i in range(retries):
-            try:
-                app.logger.info('Calling Hugging Face API')
-                result = hf.text_to_image(model="CiroN2022/cd-md-music", prompt=f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}. ")
+        app.logger.info('Generating relevant objects and emotional descriptors')
+        objects = generate_relevant_objects(song_titles)
+        descriptors = generate_emotional_descriptors(song_titles)
 
-                if isinstance(result, Image.Image):
-                    image = result
-                else:
-                    app.logger.error("Unexpected response format: %s", result)
-                    return jsonify({'error': 'Unexpected response format from Hugging Face API'}), 500
+        prompt = f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}. Relevant objects: {', '.join(objects)}. Emotional descriptors: {', '.join(descriptors)}."
 
-                buffered = io.BytesIO()
-                image.save(buffered, format="PNG")
-                img_str = base64.b64encode(buffered.getvalue()).decode()
+        app.logger.info('Calling OpenAI DALL-E API with prompt')
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1
+        )
 
-                return jsonify({'image': img_str})
-            except HTTPError as http_err:
-                app.logger.error("HTTP error occurred: %s", http_err)
-                if http_err.response.status_code == 500:
-                    if i < retries - 1:
-                        wait_time = 2 ** i
-                        app.logger.warning(f"Server error, retrying in {wait_time} seconds...")
-                        time.sleep(wait_time)
-                    else:
-                        app.logger.error("Error occurred in /generate_image: %s", http_err)
-                        return jsonify({'error': 'Server error, please try again later.'}), 500
-                elif http_err.response.status_code == 429:
-                    if i < retries - 1:
-                        wait_time = 2 ** i
-                        app.logger.warning(f"Rate limit hit, retrying in {wait_time} seconds...")
-                        time.sleep(wait_time)
-                    else:
-                        app.logger.error("Rate limit exceeded: %s", http_err)
-                        return jsonify({'error': 'Rate limit exceeded, please try again later.'}), 429
-                else:
-                    app.logger.error("Error occurred in /generate_image: %s", http_err)
-                    return jsonify({'error': str(http_err)}), http_err.response.status_code
-            except Exception as e:
-                app.logger.error("Error occurred in /generate_image: %s", e)
-                return jsonify({'error': str(e)}), 500
+        if response.data:
+            image_url = response.data[0].url
+            return jsonify({'image_url': image_url})
+        else:
+            app.logger.error("Unexpected response format from OpenAI DALL-E API")
+            return jsonify({'error': 'Unexpected response format from OpenAI DALL-E API'}), 500
+
+    except HTTPError as http_err:
+        app.logger.error("HTTP error occurred: %s", http_err)
+        return jsonify({'error': str(http_err)}), 500
     except Exception as e:
         app.logger.error("Error occurred in /generate_image: %s", e)
         return jsonify({'error': str(e)}), 500
