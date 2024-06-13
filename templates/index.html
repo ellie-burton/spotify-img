@@ -110,7 +110,7 @@
             downloadButton.style.display = 'none';
             songsContainer.style.display = 'none';
 
-            fetch('http://127.0.0.1:5000/generate_image', {
+            fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/generate_image', {  // Ensure this is the correct full URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -131,7 +131,7 @@
                 downloadButton.style.display = 'block';
 
                 // Fetch songs and update the song list
-                fetch('http://127.0.0.1:5000/get_songs', {
+                fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/get_songs', {  // Ensure this is the correct full URL
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
