@@ -71,6 +71,8 @@
 <body>
     <div class="container text-center">
         <h1>PlaylistPainter</h1>
+        <p>Welcome to PlaylistPainter! Transform your Spotify playlists into beautiful, AI-generated album covers with just a URL. This web application uses the open source "CiroN2022/cd-md-music" model on Hugging Face to create visual representations of your music taste. Perfect for music lovers, artists, and anyone looking to add a personal touch to their playlists.
+        </p>
         <form id="playlist-form" class="mt-4 form-inline">
             <input type="text" id="playlist-url" name="playlist-url" class="form-control" placeholder="Enter Spotify Playlist URL" required>
             <button type="submit" class="btn btn-custom">Generate Image</button>
@@ -80,8 +82,8 @@
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <div id="image-container" class="mt-4">
-            <img id="generated-image" class="img-fluid" alt="Generated Image" style="display: none;">
+        <div id="image-container" class="mt-4" style="width: 100%;">
+            <img id="generated-image" class="img-fluid" alt="Generated Image" style="display: none; width: 100%; height: auto;">
             <a id="download-button" href="#" class="btn btn-custom mt-3" download="generated-image.png" style="display: none;">Download Image</a>
         </div>
         <div id="songs-container" class="song-list mt-4">
