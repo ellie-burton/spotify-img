@@ -2,12 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from music import get_songs_from_playlist
 from flask_cors import CORS
 import os
-import io
-import base64
 from dotenv import load_dotenv
-import time
-from requests.exceptions import HTTPError
-from openai import OpenAI
+import openai
 
 load_dotenv()
 
@@ -16,7 +12,7 @@ CORS(app)  # Enable CORS
 
 # Load OpenAI API key from environment variables
 api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key)
+openai.api_key = api_key
 
 def generate_relevant_objects(song_titles):
     # Placeholder: Replace with actual logic to generate relevant objects
@@ -64,24 +60,20 @@ def generate_image():
         prompt = f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}. Relevant objects: {', '.join(objects)}. Emotional descriptors: {', '.join(descriptors)}."
 
         app.logger.info('Calling OpenAI DALL-E API with prompt')
-        response = client.images.generate(
+        response = openai.Image.create(
             model="dall-e-3",
             prompt=prompt,
             size="1024x1024",
-            quality="standard",
             n=1
         )
 
-        if response.data:
-            image_url = response.data[0].url
+        if response['data']:
+            image_url = response['data'][0]['url']
             return jsonify({'image_url': image_url})
         else:
             app.logger.error("Unexpected response format from OpenAI DALL-E API")
             return jsonify({'error': 'Unexpected response format from OpenAI DALL-E API'}), 500
 
-    except HTTPError as http_err:
-        app.logger.error("HTTP error occurred: %s", http_err)
-        return jsonify({'error': str(http_err)}), 500
     except Exception as e:
         app.logger.error("Error occurred in /generate_image: %s", e)
         return jsonify({'error': str(e)}), 500
