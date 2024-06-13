@@ -96,66 +96,66 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('playlist-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const playlistUrl = document.getElementById('playlist-url').value;
-            const loadingSpinner = document.querySelector('.loading-spinner');
-            const imageContainer = document.getElementById('image-container');
-            const generatedImage = document.getElementById('generated-image');
-            const downloadButton = document.getElementById('download-button');
-            const songsContainer = document.getElementById('songs-container');
-            const songsList = document.getElementById('songs-list');
+    event.preventDefault();
+    const playlistUrl = document.getElementById('playlist-url').value;
+    const loadingSpinner = document.querySelector('.loading-spinner');
+    const imageContainer = document.getElementById('image-container');
+    const generatedImage = document.getElementById('generated-image');
+    const downloadButton = document.getElementById('download-button');
+    const songsContainer = document.getElementById('songs-container');
+    const songsList = document.getElementById('songs-list');
 
-            loadingSpinner.style.display = 'block';
-            generatedImage.style.display = 'none';
-            downloadButton.style.display = 'none';
-            songsContainer.style.display = 'none';
+    loadingSpinner.style.display = 'block';
+    generatedImage.style.display = 'none';
+    downloadButton.style.display = 'none';
+    songsContainer.style.display = 'none';
 
-            fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/generate_image', {  // Ensure this is the correct full URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ playlist_url: playlistUrl })
-            })
-            .then(response => {
-                loadingSpinner.style.display = 'none';
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                generatedImage.src = `data:image/png;base64,${data.image}`;
-                generatedImage.style.display = 'block';
-                downloadButton.href = generatedImage.src;
-                downloadButton.style.display = 'block';
+    fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/generate_image', {  // Ensure this is the correct full URL
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ playlist_url: playlistUrl })
+    })
+    .then(response => {
+        loadingSpinner.style.display = 'none';
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        generatedImage.src = `data:image/png;base64,${data.image}`;
+        generatedImage.style.display = 'block';
+        downloadButton.href = generatedImage.src;
+        downloadButton.style.display = 'block';
 
-                // Fetch songs and update the song list
-                fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/get_songs', {  // Ensure this is the correct full URL
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ playlist_url: playlistUrl })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    songsList.innerHTML = '';
-                    data.songs.forEach(song => {
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item';
-                        li.textContent = song;
-                        songsList.appendChild(li);
-                    });
-                    songsContainer.style.display = 'block';
-                })
-                .catch(error => console.error('Error fetching songs:', error));
-            })
-            .catch(error => {
-                loadingSpinner.style.display = 'none';
-                console.error('Error:', error);
+        fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/get_songs', {  // Ensure this is the correct full URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ playlist_url: playlistUrl })
+        })
+        .then(response => response.json())
+        .then(data => {
+            songsList.innerHTML = '';
+            data.songs.forEach(song => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = song;
+                songsList.appendChild(li);
             });
-        });
+            songsContainer.style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching songs:', error));
+    })
+    .catch(error => {
+        loadingSpinner.style.display = 'none';
+        console.error('Error:', error);
+    });
+});
+
     </script>
 </body>
 </html>

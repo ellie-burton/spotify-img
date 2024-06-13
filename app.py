@@ -40,31 +40,32 @@ def generate_image():
         data = request.json
         playlist_url = data.get('playlist_url')
         if not playlist_url:
+            app.logger.error('No playlist URL provided')
             return jsonify({'error': 'No playlist URL provided'}), 400
 
+        app.logger.info('Fetching songs from playlist')
         songs = get_songs_from_playlist(playlist_url)
         song_titles = ", ".join(songs)
 
         retries = 3
         for i in range(retries):
             try:
-                # Ensure we correctly pass the prompt
+                app.logger.info('Calling Hugging Face API')
                 result = hf.text_to_image(model="CiroN2022/cd-md-music", prompt=f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}. ")
 
-                # Check the structure of the result
                 if isinstance(result, Image.Image):
                     image = result
                 else:
                     app.logger.error("Unexpected response format: %s", result)
                     return jsonify({'error': 'Unexpected response format from Hugging Face API'}), 500
 
-                # Convert image to base64 for web display
                 buffered = io.BytesIO()
                 image.save(buffered, format="PNG")
                 img_str = base64.b64encode(buffered.getvalue()).decode()
 
                 return jsonify({'image': img_str})
             except HTTPError as http_err:
+                app.logger.error("HTTP error occurred: %s", http_err)
                 if http_err.response.status_code == 500:
                     if i < retries - 1:
                         wait_time = 2 ** i
