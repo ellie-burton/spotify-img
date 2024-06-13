@@ -14,14 +14,6 @@ CORS(app)  # Enable CORS
 api_key = os.getenv("OPENAI_API_KEY")
 openai.api_key = api_key
 
-def generate_relevant_objects(song_titles):
-    # Placeholder: Replace with actual logic to generate relevant objects
-    return ["object1", "object2", "object3", "object4", "object5"]
-
-def generate_emotional_descriptors(song_titles):
-    # Placeholder: Replace with actual logic to generate emotional descriptors
-    return ["happy", "sad", "exciting", "calm", "nostalgic"]
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -53,11 +45,7 @@ def generate_image():
         songs = get_songs_from_playlist(playlist_url)
         song_titles = ", ".join(songs)
 
-        app.logger.info('Generating relevant objects and emotional descriptors')
-        objects = generate_relevant_objects(song_titles)
-        descriptors = generate_emotional_descriptors(song_titles)
-
-        prompt = f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}. Relevant objects: {', '.join(objects)}. Emotional descriptors: {', '.join(descriptors)}."
+        prompt = f"The image is a playlist cover of objects that encapsulate the vibe and aesthetic of the following songs: {song_titles}."
 
         app.logger.info('Calling OpenAI DALL-E API with prompt')
         response = openai.Image.create(
