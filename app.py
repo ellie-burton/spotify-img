@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from music import get_songs_from_playlist
 from huggingface_hub import InferenceClient
 from flask_cors import CORS
@@ -15,6 +15,10 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)  # Enable CORS
 hf = InferenceClient(token=os.getenv("HUGGINGFACE_API_KEY"))
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/get_songs', methods=['POST'])
 def get_songs():
