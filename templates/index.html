@@ -95,7 +95,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-document.getElementById('playlist-form').addEventListener('submit', function(event) {
+        document.getElementById('playlist-form').addEventListener('submit', function(event) {
     event.preventDefault();
     const playlistUrl = document.getElementById('playlist-url').value;
     const loadingSpinner = document.querySelector('.loading-spinner');
@@ -110,7 +110,7 @@ document.getElementById('playlist-form').addEventListener('submit', function(eve
     downloadButton.style.display = 'none';
     songsContainer.style.display = 'none';
 
-    fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/generate_image', {
+    fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/generate_image', {  // Ensure this is the correct full URL
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -125,12 +125,12 @@ document.getElementById('playlist-form').addEventListener('submit', function(eve
         return response.json();
     })
     .then(data => {
-        generatedImage.src = data.image_url;
+        generatedImage.src = `data:image/png;base64,${data.image}`;
         generatedImage.style.display = 'block';
         downloadButton.href = generatedImage.src;
         downloadButton.style.display = 'block';
 
-        fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/get_songs', {
+        fetch('https://spotify-img-bcf4303e41dc.herokuapp.com/get_songs', {  // Ensure this is the correct full URL
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -155,7 +155,6 @@ document.getElementById('playlist-form').addEventListener('submit', function(eve
         console.error('Error:', error);
     });
 });
-
 
     </script>
 </body>
