@@ -1,7 +1,8 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-SPOTIPY_CLIENT_ID="70345cca6e654254aae4fc8f10b6f119"
-SPOTIPY_CLIENT_SECRET="ceea2c3b96e546ad85925876a72ac9b3"
+import os
+
+
 
 
 spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,client_secret=SPOTIPY_CLIENT_SECRET))
@@ -9,8 +10,8 @@ spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(cl
 #change to input statement to get spotify playlist link from user
 url = "https://open.spotify.com/playlist/63srYXKnWf2b6SP3Rf7Hau?si=d4481a15907d41c0"
 def get_songs_from_playlist(url):
-    SPOTIPY_CLIENT_ID="70345cca6e654254aae4fc8f10b6f119"
-    SPOTIPY_CLIENT_SECRET="ceea2c3b96e546ad85925876a72ac9b3"
+    SPOTIPY_CLIENT_ID=os.getenv("HUGGINGFACE_API_KEY")
+    SPOTIPY_CLIENT_SECRET=os.getenv("HUGGINGFACE_API_KEY")
     spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,client_secret=SPOTIPY_CLIENT_SECRET))
     songListReturn = []
     #url = input("Enter spotify playlist url: ")
