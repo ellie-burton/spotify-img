@@ -18,3 +18,4 @@ examples/
 *.md
 .DS_Store
 *.egg-info/
+.env
